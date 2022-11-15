@@ -9,5 +9,5 @@
 - 📦 PyPI
 
 **RESOURCES**
-- GitHub: https://github.com/IndexOffy/onion-api
+- GitHub: https://github.com/IndexOffy/onion-link
 - Docs:   http://www.indexoffy.com/

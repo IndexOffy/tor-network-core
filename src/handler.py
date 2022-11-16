@@ -34,7 +34,7 @@ class Handler():
                 title=data_title,
                 author=data_author,
                 keywords=data_keywords,
-                verify=1
+                verify=True
             )
         )
 

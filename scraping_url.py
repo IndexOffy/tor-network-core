@@ -1,40 +1,73 @@
-from bs4 import BeautifulSoup
+from src.handler import Handler
+from src.request import BaseRequest
+from src.settings import URL_API
 
-from src.browser import Browser
 
-link = 'https://thehiddenwiki.org/'
-instance = Browser(driver='tor')
-instance.driver.get(link)
+def process_tor():
+    instance = Handler()
+    request = BaseRequest(url=URL_API)
 
-full_html = instance.driver.page_source
-resp = BeautifulSoup(full_html, "html.parser")
+    response = request.make_get(
+        params=dict(
+            verify=False,
+            fail=False,
+            running=False,
+            limit=10
+        )
+    )
 
-links = resp.find_all('a')
-list_links = list()
+    def load(url):
+        try:
+            instance.execute(link=url)
+        except Exception as error:
+            print(error)
 
-print(instance.driver.title)
+            error_lit = [
+                'Browsing context has been discarded',
+                'Failed to decode response from marionette'
+            ]
 
-keywords = resp.find("meta", {"name":"keywords"})
-author = resp.find("meta", {"name":"author"})
+            try:
+                link = request.make_get(params=dict(link=url))
+                attempts = int(link.json()[0].get("attempts")) + 1
 
-keywords = keywords.get("content") if keywords else None
-keywords = author.get("content") if author else None
+                if not error.msg in error_lit:
+                    if link.status_code == 200:
+                        request.make_put(
+                            params=dict(link=url),
+                            payload=dict(
+                                verify=True,
+                                fail=True,
+                                attempts=attempts
+                            )
+                        )
 
-for link in links:
-    full_link = link.get("href")
-    try:
-        len_string = full_link.find(".onion")
+            except Exception as error:
+                print(error)
 
-        if len_string > 0:
-            full_link = full_link[0:len_string + 6]
-            list_links.append(full_link)
+        finally:
+            request.make_put(
+                params=dict(link=url),
+                payload=dict(
+                    running=False
+                )
+            )
 
-    except Exception as error:
-        pass
+    if response.status_code == 200:
+        data = response.json()
 
-list_links = set(list_links)
+        for link in data:
+            model_id = link.get("id")
+            request.make_put(
+                params=dict(id=model_id),
+                payload=dict(running=True)
+            )
 
-for item in list_links:
-    print(item)
+        for link in data:
+            load(link.get("link"))
 
-instance.driver.quit()
+    instance.instance.quit()
+
+
+if __name__ == "__main__":
+    process_tor()

@@ -1,2 +1,8 @@
-url_tor_browser='https://www.torproject.org/dist/torbrowser/11.5.7/tor-browser-linux64-11.5.7_en-US.tar.xz'
-file_tor_browser='./tor-browser.tar.xz'
+from os import environ
+from dotenv import load_dotenv
+
+load_dotenv()
+
+URL_TOR_BROWSER = environ.get("URL_TOR_BROWSER")
+FILE_TOR_BROWSER = environ.get("FILE_TOR_BROWSER")
+URL_API = environ.get("URL_API")

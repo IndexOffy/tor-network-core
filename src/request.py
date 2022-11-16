@@ -27,18 +27,22 @@ class BaseRequest():
             method: str,
             params: dict = dict(),
             payload: dict = dict(),
-            header: dict = None,
-            url: str = None) -> request:
+            headers: dict = None,
+            url: str = None,
+            attempt: int = 0,
+            max_attempt: int = 5) -> request:
         """Make Request
         """
         payload = json.dumps(payload)
+        headers = headers or self.headers
+        url = url or self.url
 
         kwargs = {
             'method': method,
             'params': params,
             'data': payload,
-            'headers': header or self.headers,
-            'url': url or self.url
+            'headers': headers,
+            'url': url
         }
 
         with request(**kwargs) as response:
@@ -48,6 +52,16 @@ class BaseRequest():
 
             except HTTPError as error:
                 print(error)
+
+                if attempt < max_attempt:
+                    attempt += 1
+                    http_response = self.make_request(
+                        method=method,
+                        params=params,
+                        payload=payload,
+                        headers=headers,
+                        attempt=attempt
+                    )
 
             return http_response
 
@@ -74,13 +88,13 @@ class BaseRequest():
 
     def make_post(self,
             payload: dict,
-            header: dict = None,
+            headers: dict = None,
             url: str = None) -> request:
         """Make POST
         """
         return self.make_request(
             method='POST',
-            header=header,
+            headers=headers,
             payload=payload,
             url=url,
         )
@@ -89,7 +103,7 @@ class BaseRequest():
             payload: dict,
             model_id: int = None,
             params: dict = None,
-            header: dict = None,
+            headers: dict = None,
             url: str = None) -> request:
         """Make PUT
         """
@@ -104,7 +118,7 @@ class BaseRequest():
 
         return self.make_request(
             method='PUT',
-            header=header,
+            headers=headers,
             payload=payload,
             params=params,
             url=url,

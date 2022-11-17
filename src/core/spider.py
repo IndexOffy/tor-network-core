@@ -1,5 +1,5 @@
 from bs4 import BeautifulSoup
-from core.log import logging
+from helpers.log import logging
 
 
 class Spider(object):
@@ -42,8 +42,32 @@ class Spider(object):
         if page[-1:] == "/":
             page = page[0:len(page)-1]
 
-        if url[0:1] == "/":
-            return str(page) + str(url)
+        for check in ["/", "#"]:
+            if url[0:1] == check:
+                response = f"{page}{url}"
+                if url[0:4] != "http":
+                    return response
+
+        for check in [".php", ".html"]:
+            if url[-len(check):len(url)] == check:
+                response = f"{page}/{url.replace('./','')}"
+                if url[0:4] != "http":
+                    return response
+
+    def get_content(self) -> dict:
+        keywords = self.page_source.find("meta", {"name":"keywords"})
+        author = self.page_source.find("meta", {"name":"author"})
+
+        data_title = self.page_source.title.text
+
+        data_author = author.get("content") if author else None
+        data_keywords = keywords.get("content") if keywords else None
+
+        return dict(
+            title=data_title,
+            keywords=data_author,
+            author=data_keywords
+        )
 
     def set_page_links(self, domain: str, ssl: bool) -> set:
         list_links = list()

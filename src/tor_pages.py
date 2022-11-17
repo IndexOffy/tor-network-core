@@ -1,11 +1,13 @@
 from settings import URL_API
-from core.log import logging
+from src.settings.log import logging
 from core.handlers import HandlerTorPages
-from core.request import BaseRequest
+from src.helpers.request import BaseRequest
 
 
-def process_tor(request, data: list):
+def process_page_tor(request, data: list):
     browser = HandlerTorPages()
+    content = dict()
+    list_links = list()
 
     try:
         for link in data:
@@ -19,9 +21,21 @@ def process_tor(request, data: list):
             log_error = None
             url = link.get("link")
             try:
-                browser.execute(link=url)
+                big_data = browser.execute_page(link=url)
+                content = big_data.get("content")
+                list_links = big_data.get("list_links")
+
+                for item in list_links:
+                    data = dict(link=item)
+                    print(item)
+
+                    response = request.make_get(params=data)
+                    if response.status_code == 204:
+                        logging.info(item)
+                        request.make_post(payload=data)
+
             except Exception as error:
-                log_error = error.msg
+                log_error = error.msg if hasattr(error, 'msg') else error
                 logging.error(log_error)
 
             finally:
@@ -38,6 +52,9 @@ def process_tor(request, data: list):
                 request.make_put(
                     params=dict(link=url),
                     payload=dict(
+                        title=content.get("title"),
+                        keywords=content.get("keywords"),
+                        author=content.get("author"),
                         verify=verify,
                         running=False
                     )
@@ -51,14 +68,13 @@ if __name__ == "__main__":
     request = BaseRequest(url=URL_API)
     response = request.make_get(
         params=dict(
-            verify=1,
-            fail=1,
+            verify=0,
+            fail=0,
             running=0,
-            attempts=1,
             title='null',
-            limit=100
+            limit=5
         )
     )
 
     if response.status_code == 200:
-        process_tor(request=request, data=response.json())
+        process_page_tor(request=request, data=response.json())

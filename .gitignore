@@ -131,3 +131,5 @@ dmypy.json
 # Others
 tor-browser_en-US
 geckodriver.log
+geckodriver
+*.tar.xz

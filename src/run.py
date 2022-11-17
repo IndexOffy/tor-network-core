@@ -1,7 +1,7 @@
-from src.settings import URL_API
-from src.core.log import logging
-from src.core.handlers import HandlerTorPages
-from src.core.request import BaseRequest
+from settings import URL_API
+from core.log import logging
+from core.handlers import HandlerTorPages
+from core.request import BaseRequest
 
 
 def process_tor(request, data: list):
@@ -51,11 +51,12 @@ if __name__ == "__main__":
     request = BaseRequest(url=URL_API)
     response = request.make_get(
         params=dict(
-            verify=0,
-            fail=0,
+            verify=1,
+            fail=1,
             running=0,
+            attempts=1,
             title='null',
-            limit=50
+            limit=100
         )
     )
 

@@ -6,7 +6,7 @@ from selenium import webdriver
 from get_gecko_driver import GetGeckoDriver
 from tbselenium.tbdriver import TorBrowserDriver
 from webdriver_manager.chrome import ChromeDriverManager
-from src.settings import URL_TOR_BROWSER, FILE_TOR_BROWSER
+from settings import URL_TOR_BROWSER, FILE_TOR_BROWSER
 
 
 def get_chrome_browser(headless: bool = True):

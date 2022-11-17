@@ -1,10 +1,10 @@
 from bs4 import BeautifulSoup
 
-from src.spider import Spider
-from src.settings import URL_API
-from src.request import BaseRequest
-from src.browser import get_chrome_browser, get_tor_browser
-from src.core.log import logging
+from core.spider import Spider
+from settings import URL_API
+from core.request import BaseRequest
+from core.browser import get_chrome_browser, get_tor_browser
+from core.log import logging
 
 
 class Handler(object):

@@ -1,5 +1,5 @@
 from bs4 import BeautifulSoup
-from src.core.log import logging
+from core.log import logging
 
 
 class Spider(object):

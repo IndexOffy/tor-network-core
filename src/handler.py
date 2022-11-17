@@ -6,7 +6,7 @@ from src.browser import get_chrome_browser, get_tor_browser
 
 class Handler():
 
-    def __init__(self, driver: str = 'tor', headless=False) -> None:
+    def __init__(self, driver: str = 'tor', headless = True) -> None:
         self.request = BaseRequest(url=URL_API)
 
         if driver == 'tor':
@@ -15,7 +15,6 @@ class Handler():
             self.instance = get_chrome_browser(headless=headless)
 
     def execute(self, link: str, timeout: int = 15):
-        self.instance.implicitly_wait(time_to_wait=timeout)
         self.instance.get(link)
 
         full_html =  self.instance.page_source

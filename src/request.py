@@ -1,4 +1,6 @@
 import json
+
+from time import sleep
 from requests import request, HTTPError
 
 
@@ -55,6 +57,8 @@ class BaseRequest():
 
                 if attempt < max_attempt:
                     attempt += 1
+                    sleep(5)
+
                     http_response = self.make_request(
                         method=method,
                         params=params,

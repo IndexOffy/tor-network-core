@@ -43,7 +43,7 @@ class Handler(object):
 
 class HandlerChromePages(Handler):
     
-    def __init__(self, headless=False) -> None:
+    def __init__(self, headless=True) -> None:
         super().__init__(headless)
         self.instance = get_chrome_browser(headless=self.headless)
         self.domain = ".com"
@@ -52,7 +52,7 @@ class HandlerChromePages(Handler):
 
 class HandlerTorPages(Handler):
     
-    def __init__(self, headless=False) -> None:
+    def __init__(self, headless=True) -> None:
         super().__init__(headless)
         self.instance = get_tor_browser(headless=self.headless)
         self.domain = ".onion"

@@ -1,7 +1,7 @@
-from settings import URL_API
-from src.settings.log import logging
+from settings import URL_API_PAGE
+from helpers.log import logging
 from core.handlers import HandlerTorPages
-from src.helpers.request import BaseRequest
+from helpers.request import BaseRequest
 
 
 def process_page_tor(request, data: list):
@@ -27,11 +27,10 @@ def process_page_tor(request, data: list):
 
                 for item in list_links:
                     data = dict(link=item)
-                    print(item)
 
                     response = request.make_get(params=data)
                     if response.status_code == 204:
-                        logging.info(item)
+                        logging.info(f" {item}")
                         request.make_post(payload=data)
 
             except Exception as error:
@@ -65,7 +64,7 @@ def process_page_tor(request, data: list):
 
 
 if __name__ == "__main__":
-    request = BaseRequest(url=URL_API)
+    request = BaseRequest(url=URL_API_PAGE)
     response = request.make_get(
         params=dict(
             verify=0,

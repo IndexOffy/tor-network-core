@@ -1,18 +1,17 @@
-from settings import URL_API_PAGE
-from helpers.log import logging
-from core.handlers import HandlerTorPages
-from helpers.request import BaseRequest
+from settings import URL_API_PAGE, URL_API_SUBPAGE
+from base.log import logging
+from base.handlers import HandlerTorPages
+from base.request import BaseRequest
 
 
-def process_page_tor(request, data: list):
+def process_subpage_tor(request_page, request_subpage, data: list):
     browser = HandlerTorPages()
-    content = dict()
     list_links = list()
 
     try:
         for link in data:
             model_id = link.get("id")
-            request.make_put(
+            request_page.make_put(
                 params=dict(id=model_id),
                 payload=dict(running=True)
             )
@@ -21,24 +20,23 @@ def process_page_tor(request, data: list):
             log_error = None
             url = link.get("link")
             try:
-                big_data = browser.execute_page(link=url)
-                content = big_data.get("content")
+                big_data = browser.execute_subpage(link=url)
                 list_links = big_data.get("list_links")
 
                 for item in list_links:
                     data = dict(link=item)
 
-                    response = request.make_get(params=data)
+                    response = request_subpage.make_get(params=data)
                     if response.status_code == 204:
                         logging.info(f" {item}")
-                        request.make_post(payload=data)
+                        request_subpage.make_post(payload=data)
 
             except Exception as error:
                 log_error = error.msg if hasattr(error, 'msg') else error
                 logging.error(log_error)
 
             finally:
-                verify = True
+                explored = True
                 if log_error:
                     error_lit = [
                         'Browsing context has been discarded',
@@ -46,15 +44,12 @@ def process_page_tor(request, data: list):
                         'Tried to run command without establishing a connection'
                     ]
                     if log_error in error_lit:
-                        verify = False
+                        explored = False
 
-                request.make_put(
+                request_page.make_put(
                     params=dict(link=url),
                     payload=dict(
-                        title=content.get("title"),
-                        keywords=content.get("keywords"),
-                        author=content.get("author"),
-                        verify=verify,
+                        explored=explored,
                         running=False
                     )
                 )
@@ -64,16 +59,22 @@ def process_page_tor(request, data: list):
 
 
 if __name__ == "__main__":
-    request = BaseRequest(url=URL_API_PAGE)
-    response = request.make_get(
+    request_page = BaseRequest(url=URL_API_PAGE)
+    request_subpage = BaseRequest(url=URL_API_SUBPAGE)
+
+    response = request_page.make_get(
         params=dict(
-            verify=0,
+            verify=1,
             fail=0,
             running=0,
-            title='null',
-            limit=5
+            explored=0,
+            limit=100
         )
     )
 
     if response.status_code == 200:
-        process_page_tor(request=request, data=response.json())
+        process_subpage_tor(
+            request_page=request_page,
+            request_subpage=request_subpage,
+            data=response.json()
+        )

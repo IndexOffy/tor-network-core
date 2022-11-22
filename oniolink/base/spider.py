@@ -1,8 +1,8 @@
 from bs4 import BeautifulSoup
-from helpers.log import logging
+from base.log import logging
 
 
-class Spider(object):
+class BaseSpider(object):
 
     def __init__(self, url: str, page_source: BeautifulSoup) -> None:
         self.url = url

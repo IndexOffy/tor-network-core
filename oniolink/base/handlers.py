@@ -1,10 +1,10 @@
 from bs4 import BeautifulSoup
 
-from core.spider import Spider
-from core.browser import get_chrome_browser, get_tor_browser
+from base.spider import BaseSpider
+from base.browser import get_chrome_browser, get_tor_browser
 
 
-class Handler(object):
+class BaseHandler(object):
 
     def __init__(self, headless=True) -> None:
         self.headless = headless
@@ -16,7 +16,7 @@ class Handler(object):
         self.instance.get(link)
 
         page_source = BeautifulSoup(self.instance.page_source, "html.parser")
-        worker = Spider(url=link, page_source=page_source)
+        worker = BaseSpider(url=link, page_source=page_source)
 
         content = worker.get_content()
         list_links = worker.set_page_links(domain=self.domain, ssl=self.ssl)
@@ -30,7 +30,7 @@ class Handler(object):
         self.instance.get(link)
 
         page_source = BeautifulSoup(self.instance.page_source, "html.parser")
-        worker = Spider(url=link, page_source=page_source)
+        worker = BaseSpider(url=link, page_source=page_source)
 
         content = worker.get_content()
         list_links = worker.set_subpage_links()
@@ -41,7 +41,7 @@ class Handler(object):
         )
 
 
-class HandlerChromePages(Handler):
+class HandlerChromePages(BaseHandler):
     
     def __init__(self, headless=True) -> None:
         super().__init__(headless)
@@ -50,9 +50,9 @@ class HandlerChromePages(Handler):
         self.ssl = True
 
 
-class HandlerTorPages(Handler):
+class HandlerTorPages(BaseHandler):
     
-    def __init__(self, headless=True) -> None:
+    def __init__(self, headless=False) -> None:
         super().__init__(headless)
         self.instance = get_tor_browser(headless=self.headless)
         self.domain = ".onion"

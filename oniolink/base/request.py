@@ -2,14 +2,17 @@ import json
 
 from time import sleep
 from requests import request, HTTPError
+from settings import URL_API
 
 
 class BaseRequest():
     """Base class request
     """
 
+    __endpoint__ = ''
+
     def __init__(self, url: str = None) -> None:
-        self.url = url
+        self.url = url if url else URL_API
         self.headers = None
         self.setup()
 
@@ -23,7 +26,7 @@ class BaseRequest():
         }
 
     def load_url(self):
-        self.url = self.url
+        self.url = self.url + self.__endpoint__
 
     def make_request(self,
             method: str,

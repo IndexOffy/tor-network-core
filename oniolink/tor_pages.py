@@ -1,37 +1,55 @@
-from settings import URL_API_PAGE
-from base.log import logging
-from base.handlers import HandlerTorPages
-from base.request import BaseRequest
+import logging
+
+from base.api import RequestLinks, RequestConnections
+from browser.construct import ConstructTorPages
 
 
 def process_page_tor(request, data: list):
-    browser = HandlerTorPages()
+    browser = ConstructTorPages(headless=False)
     content = dict()
     list_links = list()
 
     try:
         for link in data:
-            model_id = link.get("id")
             request.make_put(
-                params=dict(id=model_id),
+                params=dict(id=link.get("id")),
                 payload=dict(running=True)
             )
 
         for link in data:
             log_error = None
-            url = link.get("link")
+            page_id = link.get("id")
+            page_link = link.get("link")
+
             try:
-                big_data = browser.execute_page(link=url)
+                big_data = browser.execute_page(link=page_link)
                 content = big_data.get("content")
                 list_links = big_data.get("list_links")
 
                 for item in list_links:
-                    data = dict(link=item)
+                    params = dict(link=item)
+                    response = request.make_get(params=params)
+                    logging.info(f" {item}")
 
-                    response = request.make_get(params=data)
+                    id_href = None
+
                     if response.status_code == 204:
-                        logging.info(f" {item}")
-                        request.make_post(payload=data)
+                        data_link = request.make_post(payload=params)
+                        link = data_link.get("id")
+
+                    if response.status_code == 200:
+                        if len(response.json()) == 1:
+                            id_href = response.json()[0].get("id")
+
+                    if id_href and page_id != id_href:
+                        print(f"{page_id} - {id_href}")
+                        RequestConnections().make_post(
+                            payload=dict(
+                                id_link=page_id,
+                                id_href=id_href,
+                                status=True
+                            )
+                        )
 
             except Exception as error:
                 log_error = error.msg if hasattr(error, 'msg') else error
@@ -49,7 +67,7 @@ def process_page_tor(request, data: list):
                         verify = False
 
                 request.make_put(
-                    params=dict(link=url),
+                    params=dict(link=page_link),
                     payload=dict(
                         title=content.get("title"),
                         keywords=content.get("keywords"),
@@ -64,7 +82,7 @@ def process_page_tor(request, data: list):
 
 
 if __name__ == "__main__":
-    request = BaseRequest(url=URL_API_PAGE)
+    request = RequestLinks()
     response = request.make_get(
         params=dict(
             verify=0,

@@ -1,5 +1,5 @@
+import logging
 from bs4 import BeautifulSoup
-from base.log import logging
 
 
 class BaseSpider(object):

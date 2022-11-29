@@ -1,11 +1,11 @@
-from settings import URL_API_PAGE, URL_API_SUBPAGE
-from base.log import logging
-from base.handlers import HandlerTorPages
-from base.request import BaseRequest
+import logging
+
+from base.api import RequestLinks, RequestSubpages
+from browser.construct import ConstructTorPages
 
 
 def process_subpage_tor(request_page, request_subpage, data: list):
-    browser = HandlerTorPages()
+    browser = ConstructTorPages()
     list_links = list()
 
     try:
@@ -59,8 +59,8 @@ def process_subpage_tor(request_page, request_subpage, data: list):
 
 
 if __name__ == "__main__":
-    request_page = BaseRequest(url=URL_API_PAGE)
-    request_subpage = BaseRequest(url=URL_API_SUBPAGE)
+    request_page = RequestLinks()
+    request_subpage = RequestSubpages()
 
     response = request_page.make_get(
         params=dict(

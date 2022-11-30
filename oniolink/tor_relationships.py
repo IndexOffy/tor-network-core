@@ -28,7 +28,7 @@ def process_relationship_tor(request, data: list):
                     response = request.make_get(params=dict(link=item))
 
                     if response.status_code == 200:
-                        data_connection = response.json()
+                        data_connection = response.json()[0]
 
                         RequestConnections().make_post(
                             payload=dict(
@@ -47,7 +47,8 @@ def process_relationship_tor(request, data: list):
                 request.make_put(
                     params=dict(link=url),
                     payload=dict(
-                        running=False
+                        running=False,
+                        login=True
                     )
                 )
 
@@ -61,7 +62,8 @@ if __name__ == "__main__":
         params=dict(
             verify=1,
             running=0,
-            limit=5
+            login=0,
+            limit=25
         )
     )
 

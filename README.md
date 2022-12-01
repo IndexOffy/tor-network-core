@@ -1,4 +1,4 @@
-# onion-link
+# tor-network-link
 
 ### Commit Style
 - ⚙️ NO-TASK
@@ -9,5 +9,5 @@
 - 📦 PyPI
 
 **RESOURCES**
-- GitHub: https://github.com/IndexOffy/onion-link
+- GitHub: https://github.com/IndexOffy/tor-network-link
 - Docs:   http://www.indexoffy.com/

@@ -5,15 +5,15 @@ from browser.construct import ConstructTorPages
 
 
 def process_page_tor(request, data: list):
-    browser = ConstructTorPages(headless=False)
+    browser = ConstructTorPages()
     content = dict()
     list_links = list()
 
     try:
         for link in data:
             request.make_put(
-                params=dict(id=link.get("id")),
-                payload=dict(running=True)
+                payload=dict(running=True),
+                model_id=link.get("id")
             )
 
         for link in data:
@@ -35,6 +35,7 @@ def process_page_tor(request, data: list):
 
                     if response.status_code == 204:
                         data_link = request.make_post(payload=params)
+                        data_link = data_link.json()
                         link = data_link.get("id")
 
                     if response.status_code == 200:

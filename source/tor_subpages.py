@@ -20,7 +20,7 @@ def process_subpage_tor(request_page, request_subpage, data: list):
             log_error = None
             url = link.get("link")
             try:
-                big_data = browser.execute_subpage(link=url)
+                big_data = browser.execute_subpage_link(link=url)
                 list_links = big_data.get("list_links")
 
                 for item in list_links:

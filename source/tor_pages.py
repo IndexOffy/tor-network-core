@@ -22,7 +22,7 @@ def process_page_tor(request, data: list):
             page_link = link.get("link")
 
             try:
-                big_data = browser.execute_page(link=page_link)
+                big_data = browser.execute_page_link(link=page_link)
                 content = big_data.get("content")
                 list_links = big_data.get("list_links")
 

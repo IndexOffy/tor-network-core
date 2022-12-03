@@ -7,7 +7,7 @@ from browser.construct import ConstructTorPages
 class HandlerTorRelationship(BaseHandler):
 
     def run(self):
-        big_data = self.browser.execute_page(link=self.link.get("link"))
+        big_data = self.browser.execute_page_link(link=self.link.get("link"))
         list_links = big_data.get("list_links")
 
         for item in list_links:

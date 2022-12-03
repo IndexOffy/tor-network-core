@@ -21,7 +21,7 @@ def process_relationship_tor(request, data: list):
             url = link.get("link")
 
             try:
-                big_data = browser.execute_page(link=url)
+                big_data = browser.execute_page_link(link=url)
                 list_links = big_data.get("list_links")
 
                 for item in list_links:

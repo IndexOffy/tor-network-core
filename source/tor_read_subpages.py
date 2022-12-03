@@ -20,7 +20,7 @@ def process_subpage_tor(request_page, request_subpage, data: list):
             page_link = link.get("link")
 
             try:
-                big_data = browser.execute_page(link=page_link)
+                big_data = browser.execute_page_link(link=page_link)
                 list_links = big_data.get("list_links")
 
                 for item in list_links:

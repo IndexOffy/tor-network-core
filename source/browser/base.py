@@ -28,7 +28,7 @@ def get_tor_browser(headless: bool = True):
     if not exists(FILE_TOR_BROWSER):
         urlretrieve(URL_TOR_BROWSER, FILE_TOR_BROWSER)
         system(f'tar -xvJf {FILE_TOR_BROWSER}')
-        system('sudo apt-get install tor')
+        system('apt-get install tor')
 
         get_driver = GetGeckoDriver()
         get_driver.install()

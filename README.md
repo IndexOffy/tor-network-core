@@ -11,7 +11,7 @@ $ sudo docker build --tag tor-link --file docker/Dockerfile .
  - Starting the Docker Container
 
 ```bash
-$ sudo docker run -d -t tor-link/dev
+$ sudo docker run -d -t tor-link
 ```
 
  - Enter the container

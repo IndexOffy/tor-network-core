@@ -1,20 +1,11 @@
 ARG APP_PATH=/opt
 
 FROM python:3.9.15-slim
-
 ARG APP_PATH
 WORKDIR $APP_PATH
 
-RUN echo "deb http://deb.debian.org/debian/ unstable main contrib non-free" >> /etc/apt/sources.list.d/debian.list
 RUN apt-get update && apt-get upgrade -y
-RUN apt-get install libegl-dev libpci-dev -y
-
-RUN apt-get install wget -y
-RUN apt-get install xz-utils -y
-
-RUN wget https://dist.torproject.org/torbrowser/11.5.8/tor-browser-linux64-11.5.8_en-US.tar.xz -O ./tor-browser-linux.tar.xz
-RUN tar -xvJf ./tor-browser-linux.tar.xz
-RUN apt-get install tor -y
+RUN apt-get install -y libegl-dev libpci-dev libglib2.0-0 libnss3 libgconf-2-4 libfontconfig1
 
 COPY ./source $APP_PATH/source
 COPY ./requirements.txt $APP_PATH/requirements.txt
@@ -22,5 +13,3 @@ COPY ./.env $APP_PATH/.env
 
 RUN pip install --upgrade pip
 RUN pip install -r $APP_PATH/requirements.txt --no-cache-dir
-
-RUN service tor restart

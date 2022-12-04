@@ -12,10 +12,12 @@ class CommandChrome(BaseCommand):
     """
 
     def explore_page(self):
-        """python source/main.py chrome
-
-        --run explore_page
-        --limit 5
+        """python source/main.py chrome --run explore_page
+        
+        --verify 0
+        --fail 0
+        --running 0
+        --limit 100
         """
         request = RequestUrls()
         response = request.make_get(

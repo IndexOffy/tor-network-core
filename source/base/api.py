@@ -14,3 +14,8 @@ class RequestSubpages(BaseRequest):
 class RequestConnections(BaseRequest):
 
     __endpoint__ = 'connections/'
+
+
+class RequestUrls(BaseRequest):
+
+    __endpoint__ = 'urls/'

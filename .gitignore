@@ -129,7 +129,9 @@ dmypy.json
 .pyre/
 
 # Others
+*.zip
+*.tar.xz
 tor-browser_en-US
 geckodriver.log
 geckodriver
-*.tar.xz
+chromedriver

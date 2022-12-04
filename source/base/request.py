@@ -11,8 +11,9 @@ class BaseRequest():
 
     __endpoint__ = ''
 
-    def __init__(self, url: str = None) -> None:
+    def __init__(self, url: str = None, max_attempt: int = 5) -> None:
         self.url = url if url else URL_API
+        self.max_attempt = max_attempt
         self.headers = None
         self.setup()
 
@@ -34,8 +35,7 @@ class BaseRequest():
             payload: dict = dict(),
             headers: dict = None,
             url: str = None,
-            attempt: int = 0,
-            max_attempt: int = 5) -> request:
+            attempt: int = 0) -> request:
         """Make Request
         """
         payload = json.dumps(payload)
@@ -58,7 +58,7 @@ class BaseRequest():
             except HTTPError as error:
                 print(error)
 
-                if attempt < max_attempt:
+                if attempt < self.max_attempt:
                     attempt += 1
                     sleep(5)
 

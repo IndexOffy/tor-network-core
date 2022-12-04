@@ -135,3 +135,4 @@ tor-browser_en-US
 geckodriver.log
 geckodriver
 chromedriver
+.files

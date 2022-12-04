@@ -6,6 +6,8 @@
 
 ```bash
 $ sudo docker build --tag tor-link --file docker/Dockerfile .
+$ sudo docker build --tag tor-link --file docker/Dockerfile.chrome .
+$ sudo docker build --tag tor-link --file docker/Dockerfile.tor .
 ```
 
  - Starting the Docker Container
@@ -18,6 +20,13 @@ $ sudo docker run -d -t tor-link
 
 ```bash
 $ sudo docker exec -i -t ID /bin/bash
+```
+
+## Commands [Docker]
+
+```dockerfile
+CMD ["python", "source/main.py", "chrome", "--run", "explore_page"]
+CMD ["python", "source/main.py", "chrome", "--run", "search_page"]
 ```
 
 

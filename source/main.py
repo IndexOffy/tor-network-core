@@ -27,6 +27,7 @@ def main():
     cmd_tor.add_argument('--running', **options)
     cmd_tor.add_argument('--page', type=int, default=1)
     cmd_tor.add_argument('--limit', type=int, default=100)
+    cmd_tor.add_argument('--headless', type=int, default=1)
     cmd_tor.set_defaults(exec=CommandTor)
 
     cmd_chrome = subparsers.add_parser('chrome')
@@ -37,6 +38,7 @@ def main():
     cmd_chrome.add_argument('--running', **options)
     cmd_chrome.add_argument('--page', type=int, default=1)
     cmd_chrome.add_argument('--limit', type=int, default=100)
+    cmd_chrome.add_argument('--headless', type=int, default=1)
     cmd_chrome.set_defaults(exec=CommandChrome)
 
     arguments = parser.parse_args()

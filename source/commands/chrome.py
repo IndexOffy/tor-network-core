@@ -1,5 +1,10 @@
+"""
+Chrome Commands Module
+"""
+
+
+from base.api import RequestUrls
 from base.command import BaseCommand
-from base.api import RequestUrls, RequestLinks
 from process import (
     chrome_explore_page,
     chrome_search_duckduckgo_page,
@@ -14,10 +19,10 @@ class CommandChrome(BaseCommand):
     def explore_page(self):
         """python source/main.py chrome --run explore_page
         
-        --verify 0
-        --fail 0
-        --running 0
-        --limit 100
+        --verify    <VALUE> BOOL | [0] Record not verified      [1] Record Verified
+        --fail      <VALUE> BOOL | [0] No loading errors        [1] With loading errors
+        --running   <VALUE> BOOL | [0] Record in Execution      [1] Registry not running
+        --limit     <VALUE> INT  | [100] Return record quantity
         """
         request = RequestUrls()
         response = request.make_get(
@@ -34,26 +39,28 @@ class CommandChrome(BaseCommand):
             chrome_explore_page(data=response.json())
 
     def search_duckduckgo_page(self):
-        """python source/main.py chrome
+        """python source/main.py chrome --run search_duckduckgo_page
 
-        --run search_duckduckgo_page
-        --search 'duckduckgo'
-        --page 1
+        --search    <VALUE> STR  | [Whatever] Word to be searched, ex: 'duckduckgo'.
+        --page      <VALUE> INT  | [5] Number of pages to scroll.
+        --headless  <VALUE> BOOL | [0] To open browser [1] Background browser.
         """
         chrome_search_duckduckgo_page(
             search=self.search,
-            page=self.page
+            page=self.page,
+            headless=bool(self.headless)
         )
 
 
     def search_google_page(self):
-        """python source/main.py chrome
-
-        --run search_google_page
-        --search 'google'
-        --page 1
+        """python source/main.py chrome --run search_google_page
+        
+        --search    <VALUE> STR  | [Whatever] Word to be searched, ex: 'google'.
+        --page      <VALUE> INT  | [5] Number of pages to scroll.
+        --headless  <VALUE> BOOL | [0] To open browser [1] Background browser.
         """
         chrome_search_google_page(
             search=self.search,
-            page=self.page
+            page=self.page,
+            headless=bool(self.headless)
         )

@@ -1,3 +1,8 @@
+"""
+Tor Commands Module
+"""
+
+
 from base.api import RequestLinks, RequestSubpages
 from base.command import BaseCommand
 from process import (
@@ -14,10 +19,10 @@ class CommandTor(BaseCommand):
     def search_page(self):
         """python source/main.py tor --run search_page
 
-        --verify 0
-        --fail 0
-        --running 0
-        --limit 100
+        --verify    <VALUE> BOOL | [0] Record not verified      [1] Record Verified
+        --fail      <VALUE> BOOL | [0] No loading errors        [1] With loading errors
+        --running   <VALUE> BOOL | [0] Record in Execution      [1] Registry not running
+        --limit     <VALUE> INT  | [100] Return record quantity
         """
         response = RequestLinks().make_get(
             params=dict(
@@ -35,10 +40,10 @@ class CommandTor(BaseCommand):
     def search_relationship(self):
         """python source/main.py tor --run search_relationship
 
-        --verify 0
-        --fail 0
-        --running 0
-        --limit 100
+        --verify    <VALUE> BOOL | [0] Record not verified      [1] Record Verified
+        --fail      <VALUE> BOOL | [0] No loading errors        [1] With loading errors
+        --running   <VALUE> BOOL | [0] Record in Execution      [1] Registry not running
+        --limit     <VALUE> INT  | [100] Return record quantity
         """
         response = RequestLinks().make_get(
             params=dict(
@@ -55,10 +60,10 @@ class CommandTor(BaseCommand):
     def search_subpage(self):
         """python source/main.py tor --run search_subpage
 
-        --verify 0
-        --fail 0
-        --running 0
-        --limit 100
+        --verify    <VALUE> BOOL | [0] Record not verified      [1] Record Verified
+        --fail      <VALUE> BOOL | [0] No loading errors        [1] With loading errors
+        --running   <VALUE> BOOL | [0] Record in Execution      [1] Registry not running
+        --limit     <VALUE> INT  | [100] Return record quantity
         """
         response = RequestSubpages().make_get(
             params=dict(

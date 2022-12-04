@@ -8,7 +8,7 @@
  \__\___/|_|  |_| |_|\___|\__| \_/\_/ \___/|_|  |_|\_\ v1.0
  ```
 
-## Running the project with [Docker]
+### Running the project with [Docker]
 
  - Building the Docker image
 
@@ -30,7 +30,7 @@ $ sudo docker run -d -t tor-link
 $ sudo docker exec -i -t ID /bin/bash
 ```
 
-## Commands [Docker]
+### Commands [Docker]
 
 ```dockerfile
 CMD ["python", "source/main.py", "chrome", "--run", "explore_page"]

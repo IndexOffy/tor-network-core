@@ -9,8 +9,8 @@ from base.api import RequestLinks, RequestUrls
 from browser.construct import ConstructChromePages
 
 
-def chrome_explore_page(data: list):
-    browser = ConstructChromePages(headless=True)
+def chrome_explore_page(data: list, headless: bool = True):
+    browser = ConstructChromePages(headless=headless)
     browser.domain = ".onion"
     browser.ssl = False
 

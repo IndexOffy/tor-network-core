@@ -12,9 +12,9 @@ from base.api import RequestUrls
 from browser.construct import ConstructChromePages
 
 
-def chrome_search_duckduckgo_page(search: str, page: int):
+def chrome_search_duckduckgo_page(search: str, page: int, headless: bool = True):
     domain = 'https://duckduckgo.com/'
-    browser = ConstructChromePages(headless=True, link=domain)
+    browser = ConstructChromePages(headless=headless, link=domain)
 
     try:
         input_search = browser.instance.find_element("name", "q")
@@ -33,7 +33,7 @@ def chrome_search_duckduckgo_page(search: str, page: int):
             link = article_title.find_element(By.TAG_NAME, "a")
 
             url = link.get_attribute("href")
-            RequestUrls().make_post(payload=dict(link=url))
+            RequestUrls(max_attempt=0).make_post(payload=dict(link=url))
             print(url)
 
     except Exception as error:
@@ -44,22 +44,28 @@ def chrome_search_duckduckgo_page(search: str, page: int):
         browser.instance.quit()
 
 
-def chrome_search_google_page(search: str, page: int):
+def chrome_search_google_page(search: str, page: int, headless: bool = True):
     domain = 'https://google.com/'
-    browser = ConstructChromePages(headless=True, link=domain)
+    browser = ConstructChromePages(headless=headless, link=domain)
 
     try:
         input_search = browser.instance.find_element("name", "q")
         input_search.send_keys(search)
         input_search.submit()
 
-        articles = browser.instance.find_elements(By.CLASS_NAME, "g")
-        for article in articles:
-            link = article.find_element(By.TAG_NAME, "a")
+        def find_all():
+            articles = browser.instance.find_elements(By.CLASS_NAME, "g")
+            for article in articles:
+                link = article.find_element(By.TAG_NAME, "a")
 
-            url = link.get_attribute("href")
-            RequestUrls().make_post(payload=dict(link=url))
-            print(url)
+                url = link.get_attribute("href")
+                RequestUrls(max_attempt=0).make_post(payload=dict(link=url))
+                print(url)
+        
+        for index, item in enumerate(range(page), 2):
+            find_all()
+            sleep(2)
+            page = browser.instance.find_element(By.LINK_TEXT, str(index)).click()
 
     except Exception as error:
         log_error = error.msg if hasattr(error, 'msg') else error

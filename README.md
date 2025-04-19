@@ -38,14 +38,21 @@ CMD ["python", "source/main.py", "chrome", "--run", "explore_page"]
 CMD ["python", "source/main.py", "chrome", "--run", "search_page"]
 ```
 
+## Commit Style
 
-### Commit Style
-- ⚙️ NO-TASK
+- ⚙️ FEATURE
 - 📝 PEP8
 - 📌 ISSUE
 - 🪲 BUG
 - 📘 DOCS
 - 📦 PyPI
+- ❤️️ TEST
+- ⬆️ CI/CD
+- ⚠️ SECURITY
+
+## License
+
+This project is licensed under the terms of the GPL-3.0 license.
 
 **RESOURCES**
 - GitHub: https://github.com/IndexOffy/tor-network-link
